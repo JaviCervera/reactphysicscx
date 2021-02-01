@@ -1,0 +1,9 @@
+Strict
+
+Import test.vec2test
+
+Function Main:Int()
+	New Vec2Test().Run()
+	Print "All tests passed."
+	Return 0
+End

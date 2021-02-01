@@ -1,0 +1,126 @@
+Strict
+
+Import assert
+Import src.math3d
+
+Class Vec2Test
+	Method Run:Void()
+		TestInitializers()
+		TestLength()
+		TestNorm()
+		TestDotProduct()
+		TestOtherMethods()
+		TestArithmetic()
+	End
+Private
+	Field mAssert:Assert
+	Field mVecZero:Float[]
+	Field mVec34:Float[]
+	Field mVec10:Float[]
+	Field mVec01:Float[]
+	Field mVec50:Float[]
+	Field mVec05:Float[]
+	
+	Method Setup:Void(testName:String)
+		mAssert = New Assert(testName)
+		mVecZero = Vec2Make(0.0, 0)
+		mVec34 = Vec2Make(3.0, 4)
+		mVec10 = Vec2Make(1, 0)
+		mVec01 = Vec2Make(0, 1)
+		mVec50 = Vec2Make(5, 0)
+		mVec05 = Vec2Make(0, 5)
+	End
+
+	Method TestInitializers:Void()
+		Setup("TestInitializers")
+		Local copy:Float[] = Vec2Copy(mVec34)
+		Local set:Float[] = Vec2Make(0, 0)
+		Vec2Set(6.1, 7.2, set)
+		mAssert.FloatsEqual(0, Vec2X(mVecZero))
+		mAssert.FloatsEqual(0, Vec2Y(mVecZero))
+		mAssert.StringsEqual("Vec2(0.0, 0.0)", Vec2String(mVecZero))
+		mAssert.FloatsEqual(3, Vec2X(mVec34))
+		mAssert.FloatsEqual(4, Vec2Y(mVec34))
+		mAssert.StringsEqual("Vec2(3.0, 4.0)", Vec2String(mVec34))
+		mAssert.FloatsEqual(3, Vec2X(copy))
+		mAssert.FloatsEqual(4, Vec2Y(copy))
+		mAssert.StringsEqual("Vec2(3.0, 4.0)", Vec2String(copy))
+		mAssert.FloatsEqual(6.1, Vec2X(set))
+		mAssert.FloatsEqual(7.2, Vec2Y(set))
+	End
+	
+	Method TestLength:Void()
+		Setup("TestLength")
+		mAssert.FloatsEqual(0, Vec2Length(Vec2X(mVecZero), Vec2Y(mVecZero)))
+		mAssert.FloatsEqual(0, Vec2SqLength(Vec2X(mVecZero), Vec2Y(mVecZero)))
+		mAssert.FloatsEqual(1, Vec2Length(Vec2X(mVec10), Vec2Y(mVec10)))
+		mAssert.FloatsEqual(1, Vec2Length(Vec2X(mVec01), Vec2Y(mVec01)))
+		mAssert.FloatsEqual(25, Vec2SqLength(Vec2X(mVec34), Vec2Y(mVec34)))
+		mAssert.FloatsEqual(5, Vec2Length(Vec2X(mVec34), Vec2Y(mVec34)))
+	End
+	
+	Method TestNorm:Void()
+		Setup("TestNorm")
+		Vec2Norm(Vec2X(mVec10), Vec2Y(mVec10), mVec10)
+		Vec2Norm(Vec2X(mVec01), Vec2Y(mVec01), mVec01)
+		Vec2Norm(Vec2X(mVec50), Vec2Y(mVec50), mVec50)
+		Vec2Norm(Vec2X(mVec05), Vec2Y(mVec05), mVec05)
+		mAssert.FloatsEqual(1, Vec2X(mVec10))
+		mAssert.FloatsEqual(0, Vec2Y(mVec10))
+		mAssert.FloatsEqual(0, Vec2X(mVec01))
+		mAssert.FloatsEqual(1, Vec2Y(mVec01))
+		mAssert.FloatsEqual(1, Vec2X(mVec50))
+		mAssert.FloatsEqual(0, Vec2Y(mVec50))
+		mAssert.FloatsEqual(0, Vec2X(mVec05))
+		mAssert.FloatsEqual(1, Vec2Y(mVec05))
+	End
+	
+	Method TestDotProduct:Void()
+		Setup("DotProduct")
+		mAssert.FloatsEqual(0, Vec2Dot(5, 0, 0, 8))
+		mAssert.FloatsEqual(0, Vec2Dot(5, 0, 0, 0))
+		mAssert.FloatsEqual(0, Vec2Dot(12, 45, 0, 0))
+		mAssert.FloatsEqual(74, Vec2Dot(5, 7, 5, 7))
+		mAssert.FloatsEqual(-45, Vec2Dot(3, 6, -3, -6))
+		mAssert.FloatsEqual(-2, Vec2Dot(2, 3, -7, 4))
+		mAssert.FloatsEqual(59, Vec2Dot(4, 3, 8, 9))
+	End
+	
+	Method TestOtherMethods:Void()
+		Setup("TestOtherMethods")
+		
+		Local absVec1:Float[] = Vec2Make(0, 0)
+		Local absVec2:Float[] = Vec2Make(0, 0)
+		Vec2Abs(4, 5, absVec1)
+		Vec2Abs(-7, -24, absVec2)
+		mAssert.FloatsEqual(4, Vec2X(absVec1))
+		mAssert.FloatsEqual(5, Vec2Y(absVec1))
+		mAssert.FloatsEqual(7, Vec2X(absVec2))
+		mAssert.FloatsEqual(24, Vec2Y(absVec2))
+		
+		mAssert.IntsEqual(0, Vec2MinAxis(6, 35))
+		mAssert.IntsEqual(1, Vec2MinAxis(564, 45))
+		mAssert.IntsEqual(1, Vec2MinAxis(98, 23))
+		mAssert.IntsEqual(0, Vec2MinAxis(-53, -25))
+		
+		mAssert.IntsEqual(1, Vec2MaxAxis(6, 35))
+		mAssert.IntsEqual(1, Vec2MaxAxis(7, 537))
+		mAssert.IntsEqual(0, Vec2MaxAxis(98, 23))
+		mAssert.IntsEqual(1, Vec2MaxAxis(-53, -25))
+		
+		Local minVec:Float[] = Vec2Make(0, 0)
+		Local maxVec:Float[] = Vec2Make(0, 0)
+		Vec2Min(-5, 4, -8, 6, minVec)
+		Vec2Max(-5, 4, -8, 6, maxVec)
+		mAssert.StringsEqual("Vec2(-8.0, 4.0)", Vec2String(minVec))
+		mAssert.StringsEqual("Vec2(-5.0, 6.0)", Vec2String(maxVec))
+	End
+	
+	Method TestArithmetic:Void()
+		Setup("TestArithmetic")
+		
+		mAssert.IsTrue(Vec2Equal(5, 7, 5, 7))
+		mAssert.IsFalse(Vec2Equal(63, 64, 63, 84))
+		mAssert.IsFalse(Vec2Equal(63, 64, 12, 64))
+	End
+End

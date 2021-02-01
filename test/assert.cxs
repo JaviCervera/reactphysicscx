@@ -1,0 +1,46 @@
+Strict
+
+Import os
+
+Class Assert
+	Method New(testName:String)
+		mTestName = testName
+	End
+	
+	Method IntsEqual:Void(expected:Int, got:Int)
+		If expected <> got
+			Print mTestName + ": Expected " + expected + ", got " + got
+			ExitApp(-1)
+		End
+	End
+	
+	Method FloatsEqual:Void(expected:Float, got:Float)
+		If Abs(expected - got) > 0.000001
+			Print mTestName + ": Expected " + expected + ", got " + got
+			ExitApp(-1)
+		End
+	End
+	
+	Method StringsEqual:Void(expected:String, got:String)
+		If expected <> got
+			Print mTestName + ": Expected ~q" + expected + "~q, got ~q" + got + "~q"
+			ExitApp(-1)
+		End
+	End
+	
+	Method IsTrue:Void(expr:Bool)
+		If Not expr
+			Print "Expected True"
+			ExitApp(-1)
+		End
+	End
+	
+	Method IsFalse:Void(expr:Bool)
+		If expr
+			Print "Expected False"
+			ExitApp(-1)
+		End
+	End
+Private
+	Field mTestName:String
+End
